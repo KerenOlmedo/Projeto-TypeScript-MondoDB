@@ -1,15 +1,25 @@
-
+import { UserDto } from "../dto/userDto";
+import HttpResponse from "../helpers/http-response";
 import UserService from "../service/userService";
 
 class UserController {
     async getAll(req: Request, res: any): Promise<any>{
         try {
             const users = await UserService.getAll()
-            res.json(users).status(200)
+            res.send(HttpResponse.ok(users))
         } catch (error) {
-            res.send(error).status(400)
+            res.send(HttpResponse.badRequest(error))
         }
+    }
 
+    async create(req: any, res: any) {
+        try {
+            const user: UserDto = req.body
+            const userCreated: UserDto = await UserService.create(user)
+            res.send(HttpResponse.ok(userCreated))
+        } catch (error: any) {
+            res.send(HttpResponse.badRequest(error))
+        }
     }
 }
 
