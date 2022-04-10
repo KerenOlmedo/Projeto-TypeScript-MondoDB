@@ -26,8 +26,8 @@ class UserController {
     try {
       const email: string = req.params.email;
       const dados: UserDto = req.body;
-      const userUpdate = await UserService.update(email, dados);
-      res.send(HttpResponse.ok(userUpdate));
+      await UserService.update(email, dados);
+      res.send(HttpResponse.ok({ message: "User Updated" }));
     } catch (error: any) {
       res.send(HttpResponse.badRequest(error));
     }
@@ -36,8 +36,8 @@ class UserController {
   async delete(req: any, res: any) {
     try {
       const email: string = req.params.email;
-      const deleteUser = await UserService.delete(email);
-      res.send(HttpResponse.ok(deleteUser));
+      await UserService.delete(email);
+      res.send(HttpResponse.ok({ message: "User deleted" }));
     } catch (error: any) {
       res.send(HttpResponse.badRequest(error));
     }

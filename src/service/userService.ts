@@ -1,5 +1,6 @@
 import { UserDto } from "../dto/userDto";
 import UserRepository from "../repository/userRepository";
+import bcrypt from "bcrypt";
 
 class UserService {
   async getAll() {
@@ -12,6 +13,11 @@ class UserService {
     if (email) {
       throw new Error("Email ja cadastrado");
     }
+    if (user.password !== user.passwordConfirmation) {
+      throw new Error("Senha não confere");
+    }
+    const hashPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashPassword;
     return await UserRepository.create(user);
   }
 
@@ -20,6 +26,11 @@ class UserService {
     if (!buscaEmail) {
       throw new Error("Email não encontrado!");
     }
+    if (dados.password !== dados.passwordConfirmation) {
+      throw new Error("Senha não confere");
+    }
+    const hashPassword = await bcrypt.hash(dados.password, 10);
+    dados.password = hashPassword;
     return await UserRepository.update(email, dados);
   }
 
