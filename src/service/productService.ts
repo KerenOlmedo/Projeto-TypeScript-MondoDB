@@ -1,6 +1,5 @@
 import { ProductDto } from "../dto/productDto";
 import productRepository from "../repository/productRepository";
-import bcrypt from 'bcrypt';
 
 class ProductService {
     async getAll() {
@@ -16,5 +15,21 @@ class ProductService {
         return await productRepository.create(product);
     }
 
-    
+    async update(id: string, dados: ProductDto){
+        const buscaId = await productRepository.getId(id);
+        if(!buscaId) {
+            throw new Error('Id não encontrado!');
+        }
+        return await productRepository.update(id, dados);
+    }
+
+    async delete(id: string) {
+        const buscaId = productRepository.getId(id);
+        if(!buscaId) {
+            throw new Error('Id não encontrado!');
+        }
+        return await productRepository.delete(id);
+    }
 }
+
+export default new ProductService();
